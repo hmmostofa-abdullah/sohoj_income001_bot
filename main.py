@@ -57,20 +57,32 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     elif text == "👥 Referral":
         bot_username = "@sohoj_income001_bot"
-        link = f"https://t.me/{bot_username}?start={user_id}"
+        link = f"https://t.me/{@sohoj_income001_bot}?start={user_id}"
         await update.message.reply_text(f"👥 Referral Link:\n{link}")
 
     elif text == "📢 Earn":
+    context.user_data["task_done"] = False
+
+    await update.message.reply_text(
+        "📢 Task Instructions:\n\n"
+        "1️⃣ নিচের লিংকে ক্লিক করো\n"
+        f"{https://omg10.com/4/11121960}\n\n"
+        "2️⃣ কাজ শেষ হলে '✅ Task Complete' চাপো"
+    )
+
+elif text == "✅ Task Complete":
+    if context.user_data.get("task_done"):
+        await update.message.reply_text("❗ Already claimed today")
+    else:
         cursor.execute("UPDATE users SET balance = balance + 1 WHERE user_id=?", (user_id,))
         conn.commit()
 
-        await update.message.reply_text(
-            f"📢 Click below to earn:\n{https://omg10.com/4/11121960}\n\n"
-            "✅ Task completed +1 TK added"
-        )
+        context.user_data["task_done"] = True
+
+        await update.message.reply_text("✅ Task completed! +1 TK added")
 
     elif text == "💸 Withdraw":
-        await update.message.reply_text("💸 Minimum Withdraw: 10 TK")
+        await update.message.reply_text("💸 Minimum Withdraw: 30 TK")
 
 def main():
     app = ApplicationBuilder().token(TOKEN).build()
