@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS users (
 """)
 conn.commit()
 
-keyboard = [
+keyboard = ["📢 Earn", "✅ Task Complete"],
     ["🏠 Home", "💰 Balance"],
     ["📢 Earn", "👥 Referral"],
     ["💸 Withdraw"]
