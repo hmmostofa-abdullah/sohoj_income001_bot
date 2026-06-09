@@ -4,6 +4,8 @@ from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, fil
 
 TOKEN = "8356832405:AAFk4r1XL04lFTjyuu4pD3ClmsrXpv19Sd8"
 
+MONETAG_LINK = "https://omg10.com/4/11121960"
+
 conn = sqlite3.connect("bot.db", check_same_thread=False)
 cursor = conn.cursor()
 
@@ -24,7 +26,6 @@ keyboard = [
 
 reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
 
-# START with referral
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
 
@@ -39,17 +40,12 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         cursor.execute("INSERT INTO users (user_id, ref_by) VALUES (?, ?)", (user_id, ref_id))
         conn.commit()
 
-        # referral bonus
         if ref_id:
             cursor.execute("UPDATE users SET balance = balance + 2 WHERE user_id=?", (ref_id,))
             conn.commit()
 
-    await update.message.reply_text(
-        "👋 Welcome to Earn Bot 💰",
-        reply_markup=reply_markup
-    )
+    await update.message.reply_text("👋 Welcome to Earn Bot 💰", reply_markup=reply_markup)
 
-# HANDLE
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
     text = update.message.text
@@ -62,7 +58,19 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif text == "👥 Referral":
         bot_username = "@sohoj_income001_bot"
         link = f"https://t.me/{bot_username}?start={user_id}"
-        await update.message.reply_text(f"👥 Your Referral Link:\n{link}")
+        await update.message.reply_text(f"👥 Referral Link:\n{link}")
+
+    elif text == "📢 Earn":
+        cursor.execute("UPDATE users SET balance = balance + 1 WHERE user_id=?", (user_id,))
+        conn.commit()
+
+        await update.message.reply_text(
+            f"📢 Click below to earn:\n{MONETAG_LINK}\n\n"
+            "✅ Task completed +1 TK added"
+        )
+
+    elif text == "💸 Withdraw":
+        await update.message.reply_text("💸 Minimum Withdraw: 10 TK")
 
 def main():
     app = ApplicationBuilder().token(TOKEN).build()
