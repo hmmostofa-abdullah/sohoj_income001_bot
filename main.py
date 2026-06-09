@@ -65,7 +65,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         conn.commit()
 
         await update.message.reply_text(
-            f"📢 Click below to earn:\n{MONETAG_LINK}\n\n"
+            f"📢 Click below to earn:\n{https://omg10.com/4/11121960}\n\n"
             "✅ Task completed +1 TK added"
         )
 
